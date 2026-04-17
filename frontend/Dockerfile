@@ -1,22 +1,13 @@
-# ── Stage 1: Build ──────────────────────────────────────────────────────────
-FROM node:20-alpine AS builder
+FROM node:24-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
+
 RUN npm ci
 
 COPY . .
-RUN npm run build
 
-# ── Stage 2: Serve ───────────────────────────────────────────────────────────
-FROM nginx:1.25-alpine
+EXPOSE 5173
 
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# SPA fallback: serve index.html for all routes
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "dev", "--", "--host"]
