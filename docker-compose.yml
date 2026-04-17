@@ -9,11 +9,11 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-musicify}
       POSTGRES_DB: ${DB_NAME:-musicify}
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-musicify}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-musicify}']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -37,7 +37,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:-musicify-secret-change-me}
       MUSIC_DIR: /music
     ports:
-      - "8080:8080"
+      - '8080:8080'
     volumes:
       - ./music:/music:ro
 
@@ -50,8 +50,10 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+    environment:
+      VITE_API_URL: http://localhost:8080/api
     ports:
-      - "80:80"
+      - '5173:5173'
 
 volumes:
   postgres_data:

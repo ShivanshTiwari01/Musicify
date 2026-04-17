@@ -8,9 +8,15 @@ import (
 	"github.com/ShivanshTiwari01/Musicify/backend/internal/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Load .env if it exists
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found or error loading it, relying on system environment variables")
+	}
+
 	// Initialize database
 	database, err := db.InitDB()
 	if err != nil {
@@ -54,7 +60,7 @@ func main() {
 		}
 	}
 
-	log.Println("🚀 Backend running on :8080")
+	log.Println("Backend running on :8080")
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
