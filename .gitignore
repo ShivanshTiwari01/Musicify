@@ -30,3 +30,7 @@ vendor/
 .idea/
 *.swp
 *.swo
+ 
+ #music folder
+ music/
+ 
