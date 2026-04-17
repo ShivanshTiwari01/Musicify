@@ -31,6 +31,5 @@ vendor/
 *.swp
 *.swo
  
- #music folder
- music/
- 
+#music folder
+music/
