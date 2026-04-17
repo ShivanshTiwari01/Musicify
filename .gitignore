@@ -1,0 +1,32 @@
+# ========================
+# Monorepo Root .gitignore
+# ========================
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+dist/
+build/
+
+# Go
+*.exe
+*.test
+*.out
+vendor/
+
+# Docker
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

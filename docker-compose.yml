@@ -1,0 +1,57 @@
+services:
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: musicify_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-musicify}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-musicify}
+      POSTGRES_DB: ${DB_NAME:-musicify}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-musicify}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend ─────────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: musicify_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-musicify}
+      DB_PASSWORD: ${DB_PASSWORD:-musicify}
+      DB_NAME: ${DB_NAME:-musicify}
+      JWT_SECRET: ${JWT_SECRET:-musicify-secret-change-me}
+      MUSIC_DIR: /music
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./music:/music:ro
+
+  # ── Frontend ────────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: musicify_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  postgres_data:

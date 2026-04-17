@@ -1,0 +1,8 @@
+# Backend .dockerignore
+.git
+*.md
+*.log
+.env
+.env.*
+tmp/
+vendor/
